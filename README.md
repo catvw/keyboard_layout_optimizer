@@ -1,4 +1,23 @@
-# Keyboard Layout Optimizer
+# Keyboard Layout Optimizer (Svalboard Edition)
+
+This is a fork of <https://github.com/dariogoetz/keyboard_layout_optimizer>,
+with a few (for now) specific changes to permit optimizing Svalboard layouts.
+Most of the documentation for how to actually extend this optimizer resides at
+that link.
+
+The weights and metrics given here are the result of a great deal of discussion
+and should be a reasonable starting point for generating your dream layout. By
+default, they tend to generate HD-PM but better. ;)
+
+## Metrics (brief)
+- **finger balance**: how close average load per finger is to what you want it
+  to be.
+- **hand disbalance**: how close to even the load is between hands.
+- **key costs**: some keys are harder to hit than others, so those cost more to
+  use.
+- **cluster rolls**: SFBs are complicated on the Sval, so this provides
+  fine-grained control of intra-cluster roll cost.
+- **scissoring**: TK
 
 Keyboard layout optimizer written in rust. The optimizer is based on the "evolve-keyboard-layout" [scripts by ArneBab](https://hg.sr.ht/~arnebab/evolve-keyboard-layout).
 It was historically developed with layouts of the ["Neo"-family](https://neo-layout.org/) in mind, but can be applied to arbitrary layouts. It supports the use of multiple layers per key (which are activated by holding corresponding modifiers).
@@ -265,3 +284,33 @@ Depending on the choice of metric, replace `{layout|unigram|bigram|trigram}` wit
       params:
         null: null
     ```
+Layout (layer 1):
+  □       □       □       □          m       g       w       v
+q c z   □ i □   □ e □   □ a □      k h x   j t □   □ n □   □ s □
+  b       y       o       u          l       d       p       f
+
+                        ␣ □ □      □ □ r
+                        □ ⇧ □      □ □ □
+
+Layout string (layer 1):
+□qczb□□i□y□□e□o□□a□umkhxlgjt□dw□n□pv□s□fr
+
+Unigram metrics:
+  Not found: 7.1018% of 128140936.0000
+    14.87 Finger Balance                      | Finger loads % (no thumb): 5.4 9.9 21.6 11.9 - 13.0 15.7 11.8 10.7
+     0.50 Hand Disbalance                     | Hand loads % (no thumb): 48.75 - 51.25
+    42.83 Key Costs                           | Worst unigrams:   (16.17%), e ( 9.73%), t ( 6.84%)
+
+Bigram metrics:
+  Not found: 11.8729% of 128140935.0000
+    12.89 Cluster Rolls                       | Worst: ua (31.34%), wn (15.44%), lm ( 9.08%);  Worst non-fixed: ua (31.34%), wn (15.44%), lm ( 9.08%)
+     2.66 Scissoring                          | Worst: iz (37.69%), xt (24.54%), zi ( 8.67%);  Worst non-fixed: iz (37.69%), xt (24.54%), zi ( 8.67%)
+    12.29 Movement Pattern                    | Worst: ic (14.88%), ec (10.09%), co ( 7.57%);  Worst non-fixed: ic (14.88%), ec (10.09%), co ( 7.57%)
+
+Trigram metrics:
+  Not found: 15.5942% of 128140934.0000
+    12.89 No Handswitch in Trigram            | Worst: ica ( 4.46%), nts ( 4.40%), eco ( 3.84%);  Worst non-fixed: ica ( 4.46%), nts ( 4.40%), eco ( 3.84%)
+    10.78 Secondary Bigrams                   | Worst: d t (10.99%), ove ( 3.93%), ome ( 3.48%);  Worst non-fixed: ove ( 3.93%), ome ( 3.48%), one ( 3.42%)
+
+Cost: 109.71 (optimization score: 911522)
+
